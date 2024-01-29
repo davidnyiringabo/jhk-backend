@@ -46,7 +46,6 @@ exports.register = async (req, res) => {
   }
 
   try {
-
     const queryExistingUser = "SELECT * FROM users WHERE email = $1";
     const existingUserData = await client.query(queryExistingUser, [email]);
 
@@ -65,8 +64,13 @@ exports.register = async (req, res) => {
       });
 
       const encrypted = await bcrypt.hash(password, 15);
-      const insertQuery = "INSERT INTO users (email, password, id) VALUES ($1, $2, $3)";
-      const insertData = await client.query(insertQuery, [email, encrypted, userId]);
+      const insertQuery =
+        "INSERT INTO users (email, password, id) VALUES ($1, $2, $3)";
+      const insertData = await client.query(insertQuery, [
+        email,
+        encrypted,
+        userId,
+      ]);
       console.log("User inserted:", insertData.rows[0]);
 
       res.status(201).send({ message: "Account successfully created!" });
