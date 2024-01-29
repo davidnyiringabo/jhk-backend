@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { client } = require("../config/database/connect");
 const { v4: uuidv4 } = require("uuid");
 const credsSchema = require("../utils/joiSchema.js");
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -42,38 +43,39 @@ exports.register = async (req, res) => {
   if (!email || !password) {
     res.status(400).send({ message: "Provide all required credentials" });
     return;
-  } else {
-    try {
-      const query = "SELECT * FROM users WHERE email = $1";
-      const id = uuidv4();
-      const data = client.query(query, [email]);
+  }
 
-      if (data?.row?.length === 0) {
-        res
-          .status(400)
-          .send({
-            message: "User with the same email exist. Login to continue.",
-          });
-        return;
-      } else {
-        try {
-          const validated = await credsSchema.validateAsync({
-            email: email,
-            password: password,
-          });
-          res
-            .status(201)
-            .send({ message: "Your account is About to be created!" });
-          const encrypted = await bcrypt.hash(password, 15);
-          console.log(encrypted);
-          const insert = "INSERT INTO users values ()";
-        } catch (err) {
-          res.status(400).send({ message: err.details[0].message });
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(500).send("Internal server error!");
+  try {
+
+    const queryExistingUser = "SELECT * FROM users WHERE email = $1";
+    const existingUserData = await client.query(queryExistingUser, [email]);
+
+    if (existingUserData.rows.length !== 0) {
+      res.status(400).send({
+        message: "User with the same email exists. Login to continue.",
+      });
+      return;
     }
+    const userId = uuidv4();
+
+    try {
+      const validated = await credsSchema.validateAsync({
+        email: email,
+        password: password,
+      });
+
+      const encrypted = await bcrypt.hash(password, 15);
+      const insertQuery = "INSERT INTO users (email, password, id) VALUES ($1, $2, $3)";
+      const insertData = await client.query(insertQuery, [email, encrypted, userId]);
+      console.log("User inserted:", insertData.rows[0]);
+
+      res.status(201).send({ message: "Account successfully created!" });
+    } catch (err) {
+      console.error(err.details);
+      res.status(400).send({ message: err.details[0].message });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error!");
   }
 };
