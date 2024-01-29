@@ -1,11 +1,15 @@
-exports.login = (req,res)=>{
-    console.log("login endpoint called");
+exports.login = (req, res) => {
 
-    res.send("Welcome to the login page!");
-}
+  const {email, password} = req.body;
 
-exports.test = (req,res)=>{
-    console.log(req.body)
+  if(!email || !password) {
+    res.send({
+      message: "Provide all required credentials!"
+    }).status(401);
+  }else {
+    
+  }
+  console.log("login endpoint called");
 
-    res.send("Welcome to the test page!");
-}
+  res.send("Welcome to the login page!");
+};

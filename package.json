@@ -4,7 +4,8 @@
   "description": "Backend for chk hospital",
   "main": "index.js",
   "scripts": {
-    "start:server": "nodemon index.js"
+    "start:server": "nodemon index.js",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
