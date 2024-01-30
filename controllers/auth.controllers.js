@@ -5,6 +5,7 @@ const credsSchema = require("../utils/joiSchema.js");
 const { generateOTP } = require("../utils/generateOTP.js");
 const checkUserExistance = require("../utils/exists.js");
 const generateToken = require("../utils/generateToken.js");
+const sendEmail = require("../utils/sendEmail.js");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -19,16 +20,20 @@ exports.login = async (req, res) => {
     const data = await client.query(query, [email]);
 
     if (data.rows.length === 0) {
-      res.status(401).send({ message: "Invalid email or password", status: 401 });
+      res
+        .status(401)
+        .send({ message: "Invalid email or password", status: 401 });
       return;
     }
 
     const user = data.rows[0];
-    console.log(user)
+    console.log(user);
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      res.status(401).send({ message: "Invalid email or password", status: 401});
+      res
+        .status(401)
+        .send({ message: "Invalid email or password", status: 401 });
       return;
     }
 
