@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const credsSchema = require("../utils/joiSchema.js");
 const { generateOTP } = require("../utils/generateOTP.js");
 const checkUserExistance = require("../utils/exists.js");
+const generateToken = require("../utils/generateToken.js");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -18,20 +19,24 @@ exports.login = async (req, res) => {
     const data = await client.query(query, [email]);
 
     if (data.rows.length === 0) {
-      res.status(401).send({ message: "Invalid email or password" });
+      res.status(401).send({ message: "Invalid email or password", status: 401 });
       return;
     }
 
     const user = data.rows[0];
+    console.log(user)
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      res.status(401).send({ message: "Invalid email or password" });
+      res.status(401).send({ message: "Invalid email or password", status: 401});
       return;
     }
 
-    console.log("login endpoint called");
-    res.status(200).send({message: "Successfully logged in", data: {token : ""}});
+    const token = generateToken(email, user.id);
+    console.log(token);
+    res
+      .status(200)
+      .send({ message: "Successfully logged in", data: { token: token } });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error" });
@@ -70,15 +75,17 @@ exports.register = async (req, res) => {
         userId,
       ]);
       console.log("User inserted:", insertData.rows[0]);
-      const otp = await generateOTP(email,res);
+      const otp = await generateOTP(email, res);
       console.log(otp);
-      if(sendEmail(email,otp)){
-        res.status(201).send({ message: "Your Account has been successfully created! Navigate to your email to verify account!" });
+      if (sendEmail(email, otp)) {
+        res.status(201).send({
+          message:
+            "Your Account has been successfully created! Navigate to your email to verify account!",
+        });
       }
-
     } catch (err) {
       console.error(err.details);
-      res.status(400).send({ message: err.details??[0].message });
+      res.status(400).send({ message: err.details ?? [0].message });
     }
   } catch (err) {
     console.error(err);
