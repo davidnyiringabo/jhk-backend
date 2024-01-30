@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const { client } = require("../config/database/connect");
 const { v4: uuidv4 } = require("uuid");
 const credsSchema = require("../utils/joiSchema.js");
+const { generateOTP } = require("../utils/generateOTP.js");
+const checkUserExistance = require("../utils/exists.js");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -14,7 +16,6 @@ exports.login = async (req, res) => {
   try {
     const query = "SELECT * FROM users where email = $1";
     const data = await client.query(query, [email]);
-    console.log(data);
 
     if (data.rows.length === 0) {
       res.status(401).send({ message: "Invalid email or password" });
@@ -30,7 +31,7 @@ exports.login = async (req, res) => {
     }
 
     console.log("login endpoint called");
-    res.send("Successfully logged in");
+    res.status(200).send({message: "Successfully logged in", data: {token : ""}});
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error" });
@@ -46,10 +47,7 @@ exports.register = async (req, res) => {
   }
 
   try {
-    const queryExistingUser = "SELECT * FROM users WHERE email = $1";
-    const existingUserData = await client.query(queryExistingUser, [email]);
-
-    if (existingUserData.rows.length !== 0) {
+    if (await checkUserExistance(email)) {
       res.status(400).send({
         message: "User with the same email exists. Login to continue.",
       });
@@ -72,11 +70,15 @@ exports.register = async (req, res) => {
         userId,
       ]);
       console.log("User inserted:", insertData.rows[0]);
+      const otp = await generateOTP(email,res);
+      console.log(otp);
+      if(sendEmail(email,otp)){
+        res.status(201).send({ message: "Your Account has been successfully created! Navigate to your email to verify account!" });
+      }
 
-      res.status(201).send({ message: "Account successfully created!" });
     } catch (err) {
       console.error(err.details);
-      res.status(400).send({ message: err.details[0].message });
+      res.status(400).send({ message: err.details??[0].message });
     }
   } catch (err) {
     console.error(err);
