@@ -7,7 +7,6 @@ const checkUserExistance = async (email) => {
   if (existingUserData.rows.length !== 0) {
     return true;
   }
-
   return false;
 };
 

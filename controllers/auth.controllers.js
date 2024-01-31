@@ -97,3 +97,130 @@ exports.register = async (req, res) => {
     res.status(500).send("Internal server error!");
   }
 };
+
+exports.sendResetCode = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400).send({ message: "Provide email" });
+    return;
+  }
+
+  if (!checkUserExistance(email)) {
+    res
+      .status(400)
+      .send({ message: "User With the same email doesn't exist!" });
+  }
+
+  try {
+    const otpCode = await generateOTP("nyiringabodavid62@gmail.com", res);
+    console.log(otpCode);
+
+    if (sendEmail(email, otpCode)) {
+      return res
+        .status(200)
+        .send({ message: `Verification Code sent successfully to ${email}!` });
+    } else {
+      return res.status(200).send({
+        message: `An error occured while sending verification code to ${email}! Try again later.`,
+      });
+    }
+  } catch (err) {
+    console.log("Error occured when sending verification code", err);
+    res.status(400).send({
+      message:
+        "An error occured while sending verification code! Try again later.",
+    });
+  }
+};
+
+exports.verifyCode = async (req, res) => {
+  const { email, code } = req.body;
+  if (!email || !code) {
+    res.status(400).send({
+      message: "Please send all the required credentials!",
+      status: 400,
+    });
+  }
+
+  try {
+    if (!checkUserExistance(email)) {
+      res.status(400).send({ message: "Invalid user email!", status: 400 });
+    }
+
+    const retrieveQuery = "SELECT * FROM otp WHERE email = $1";
+    const retrievedCode = await client.query(retrieveQuery, [email]);
+    if (retrievedCode.rows.length !== 0) {
+      if (retrievedCode.rows[0].otp === code) {
+        return res
+          .status(200)
+          .send({ message: "Verified account successfully!", status: 200 });
+      }
+      return res.status(400).send({ message: "Invalid Code", status: 400 });
+    }
+
+    res.status(400).send({ message: "Invalid user email!", status: 400 });
+  } catch (err) {
+    console.log("Error occured in verifying code!", err);
+    res.status(400).send({
+      message: "An error occured when verifying code! Try again later!",
+    });
+  }
+};
+exports.resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword) {
+    res
+      .status(400)
+      .send({ message: "Please Provide all credentials!", status: 200 });
+  }
+
+  if (!checkUserExistance(email)) {
+    res.status(400).send({ message: "User Not Found!", status: 200 });
+  }
+
+  try {
+    const retrieveUserQuery = "SELECT * FROM users WHERE email = $1";
+    const retrievedUser = await client.query(retrieveUserQuery, [email]);
+
+    if (retrievedUser.rows.length !== 0) {
+      const newEncryptedPassword = await bcrypt.hash(newPassword, 15);
+
+      // Fix the table name in the UPDATE query and use different placeholders for email and password
+      const updatePasswordQuery =
+        "UPDATE users SET password = $1 WHERE email = $2";
+      const updatedRows = await client.query(updatePasswordQuery, [
+        newEncryptedPassword,
+        email,
+      ]);
+      return res
+        .status(200)
+        .send({ message: "Reset password successfully!", status: 200 });
+    }
+
+    return res.status(400).send({ message: "User not found!", status: 400 });
+  } catch (err) {
+    console.log("Error occured when resetting password!", err);
+    return res
+      .status(400)
+      .send({
+        message: "Error occured when resetting password! Try again later!",
+        status: 400,
+      });
+  }
+};
+
+const updateProfile = (req, res) => {
+  const { firstName, lastName, email, position, phone } = req.body;
+
+  if (!firstName || !lastName || !email || !position || !phone) {
+    return res
+      .status(400)
+      .send({ message: "Please Provide all credentials!", status: 400 });
+  }
+
+  if (!checkUserExistance(email)) {
+    return res
+      .status(400)
+      .send({ message: "Please Provide all credentials!", status: 400 });
+  }
+};
