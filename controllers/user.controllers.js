@@ -33,11 +33,9 @@ exports.updateUser = async (req, res) => {
       .send({ message: "Updated user successfully!", status: 200 });
   } catch (err) {
     console.log("There was an error while updating the user: ", err);
-    return res
-      .status(500)
-      .send({
-        message: "error occured while updating the user! try again later!",
-        status: 500,
-      });
+    return res.status(500).send({
+      message: "error occured while updating the user! try again later!",
+      status: 500,
+    });
   }
 };
