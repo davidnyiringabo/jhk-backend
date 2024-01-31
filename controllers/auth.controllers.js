@@ -113,8 +113,13 @@ exports.sendResetCode = async (req, res) => {
 
   try {
     const otpCode = await generateOTP("nyiringabodavid62@gmail.com", res);
-    if(!otpCode){
-      return res.status(400).send({message: "Sending Verification Code Failed! Try Again!", status: 400});
+    if (!otpCode) {
+      return res
+        .status(400)
+        .send({
+          message: "Sending Verification Code Failed! Try Again!",
+          status: 400,
+        });
     }
 
     if (sendEmail(email, otpCode)) {
@@ -153,8 +158,11 @@ exports.verifyCode = async (req, res) => {
     const retrievedCode = await client.query(retrieveQuery, [email]);
     if (retrievedCode.rows.length !== 0) {
       if (retrievedCode.rows[0].otp === code) {
-        const verifiedUser = await client.query("UPDATE users SET verified = true WHERE email = $1;", [email]);
-        console.log(verifiedUser)
+        const verifiedUser = await client.query(
+          "UPDATE users SET verified = true WHERE email = $1;",
+          [email],
+        );
+        console.log(verifiedUser);
         return res
           .status(200)
           .send({ message: "Verified account successfully!", status: 200 });

@@ -13,8 +13,10 @@ const generateOTP = async (email, res) => {
 
   try {
     if (checkUserExistance(email)) {
-
-      const deleteExistingCode = await client.query("DELETE FROM otp WHERE email = $1;", [email]);
+      const deleteExistingCode = await client.query(
+        "DELETE FROM otp WHERE email = $1;",
+        [email],
+      );
       console.log(deleteExistingCode);
 
       const insertQuery = "INSERT INTO otp (email,otp) values ($1,$2);";
