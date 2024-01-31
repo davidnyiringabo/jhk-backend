@@ -114,12 +114,10 @@ exports.sendResetCode = async (req, res) => {
   try {
     const otpCode = await generateOTP("nyiringabodavid62@gmail.com", res);
     if (!otpCode) {
-      return res
-        .status(400)
-        .send({
-          message: "Sending Verification Code Failed! Try Again!",
-          status: 400,
-        });
+      return res.status(400).send({
+        message: "Sending Verification Code Failed! Try Again!",
+        status: 400,
+      });
     }
 
     if (sendEmail(email, otpCode)) {
