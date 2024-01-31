@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const {client} = require("../config/database/connect.js");
+const { client } = require("../config/database/connect.js");
 
-const authMiddleWare = async(req, res, next) => {
+const authMiddleWare = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
 
@@ -13,12 +13,15 @@ const authMiddleWare = async(req, res, next) => {
 
     const decoded = jwt.verify(token, "jakarabotiboardi");
     const currentTimeStamp = Math.floor(new Date() / 1000);
-    if(decoded.exp && decoded.exp <= currentTimeStamp ){
-      return res.status(401).send({message: "Your token has expired! Login in to continue!", status: 401});
+    if (decoded.exp && decoded.exp <= currentTimeStamp) {
+      return res.status(401).send({
+        message: "Your token has expired! Login in to continue!",
+        status: 401,
+      });
     }
     const getUserQuery = "SELECT * FROM users WHERE email = $1;";
     const user = await client.query(getUserQuery, [decoded.email]);
-    console.log( "Current user: ",user);
+    console.log("Current user: ", user);
 
     req.user = user;
     next();

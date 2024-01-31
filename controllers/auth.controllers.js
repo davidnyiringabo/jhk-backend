@@ -200,12 +200,10 @@ exports.resetPassword = async (req, res) => {
     return res.status(400).send({ message: "User not found!", status: 400 });
   } catch (err) {
     console.log("Error occured when resetting password!", err);
-    return res
-      .status(400)
-      .send({
-        message: "Error occured when resetting password! Try again later!",
-        status: 400,
-      });
+    return res.status(400).send({
+      message: "Error occured when resetting password! Try again later!",
+      status: 400,
+    });
   }
 };
 
