@@ -21,9 +21,9 @@ const authMiddleWare = async (req, res, next) => {
     }
     const getUserQuery = "SELECT * FROM users WHERE email = $1;";
     const user = await client.query(getUserQuery, [decoded.email]);
-    console.log("Current user: ", user);
+    console.log("Current user: ", user.rows[0].length);
 
-    req.user = user;
+    req.user = user.rows[0];
     next();
   } catch (err) {
     console.log("Error occurred when verifying token!", err);

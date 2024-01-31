@@ -89,6 +89,8 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "negotiator": "^0.6.3",
+    "node-cron": "^3.0.3",
+    "node-schedule": "^2.1.1",
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.3",
     "nopt": "^1.0.10",

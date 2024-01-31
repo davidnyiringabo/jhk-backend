@@ -13,6 +13,6 @@ router.post("/login", login);
 router.post("/register", register);
 router.post("/send-verification", sendResetCode);
 router.post("/verify-code", verifyCode);
-router.post("/reset-password", [authMiddleWare], resetPassword);
+router.post("/reset-password", [authMiddleWare] , resetPassword);
 
 module.exports = router;

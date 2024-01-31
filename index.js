@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const multer = require("multer");
 const upload = multer();
 const { client } = require("./config/database/connect.js");
+const authMiddleWare = require("./middlewares/auth.js");
 dotenv.config();
 const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: false }));
@@ -19,6 +20,7 @@ client
   app.use(cors());
 
 app.use("/api/v1/auth", require("./routes/auth.routes"));
+app.use("/api/v1/user", require("./routes/user.routes"));
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
