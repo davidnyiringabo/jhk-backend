@@ -21,7 +21,7 @@ const authMiddleWare = async (req, res, next) => {
     }
     const getUserQuery = "SELECT * FROM users WHERE email = $1;";
     const user = await client.query(getUserQuery, [decoded.email]);
-    console.log("Current user: ", user.rows[0].length);
+    console.log("Current user: ", user.rows[0]);
 
     req.user = user.rows[0];
     next();
