@@ -1,5 +1,10 @@
 const express = require("express");
-const { updateUser,deleteUser,getUserById, getUserByEmail } = require("../controllers/user.controllers");
+const {
+  updateUser,
+  deleteUser,
+  getUserById,
+  getUserByEmail,
+} = require("../controllers/user.controllers");
 const router = express.Router();
 const authMiddleWare = require("../middlewares/auth"); // Updated import
 

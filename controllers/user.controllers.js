@@ -40,7 +40,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 exports.deleteUser = async (req, res) => {
-  const {email} = req.body;
+  const { email } = req.body;
 
   if (!email) {
     return res
@@ -55,11 +55,8 @@ exports.deleteUser = async (req, res) => {
   }
 
   try {
-    const updateQuery =
-      "DELETE FROM users WHERE email = $1";
-    const deletedUser = await client.query(updateQuery, [
-      email,
-    ]);
+    const updateQuery = "DELETE FROM users WHERE email = $1";
+    const deletedUser = await client.query(updateQuery, [email]);
     console.log(deletedUser);
 
     res
@@ -75,8 +72,8 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getUserByEmail = async (req, res) => {
-  console.log(req.body)
-  const {email} = req.body;
+  console.log(req.body);
+  const { email } = req.body;
 
   if (!email) {
     return res
@@ -91,16 +88,17 @@ exports.getUserByEmail = async (req, res) => {
   }
 
   try {
-    const fetchQuery =
-      "SELECT * FROM users WHERE email = $1";
-    const  fetchUser = await client.query(fetchQuery, [
-      email,
-    ]);
+    const fetchQuery = "SELECT * FROM users WHERE email = $1";
+    const fetchUser = await client.query(fetchQuery, [email]);
     console.log(fetchUser);
 
     res
       .status(200)
-      .send({ message: "Fetched user successfully!", status: 200, user: fetchUser.rows[0]});
+      .send({
+        message: "Fetched user successfully!",
+        status: 200,
+        user: fetchUser.rows[0],
+      });
   } catch (err) {
     console.log("There was an error while fetching a user: ", err);
     return res.status(500).send({
@@ -111,7 +109,7 @@ exports.getUserByEmail = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
   if (!id) {
     return res
@@ -120,16 +118,17 @@ exports.getUserById = async (req, res) => {
   }
 
   try {
-    const fetchQuery =
-      "SELECT * FROM users WHERE id = $1";
-    const  fetchUser = await client.query(fetchQuery, [
-      id,
-    ]);
+    const fetchQuery = "SELECT * FROM users WHERE id = $1";
+    const fetchUser = await client.query(fetchQuery, [id]);
     console.log(fetchUser);
 
     res
       .status(200)
-      .send({ message: "Fetched user successfully!", status: 200, user: fetchUser.rows[0]});
+      .send({
+        message: "Fetched user successfully!",
+        status: 200,
+        user: fetchUser.rows[0],
+      });
   } catch (err) {
     console.log("There was an error while fetching a user: ", err);
     return res.status(500).send({
