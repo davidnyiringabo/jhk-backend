@@ -92,13 +92,11 @@ exports.getUserByEmail = async (req, res) => {
     const fetchUser = await client.query(fetchQuery, [email]);
     console.log(fetchUser);
 
-    res
-      .status(200)
-      .send({
-        message: "Fetched user successfully!",
-        status: 200,
-        user: fetchUser.rows[0],
-      });
+    res.status(200).send({
+      message: "Fetched user successfully!",
+      status: 200,
+      user: fetchUser.rows[0],
+    });
   } catch (err) {
     console.log("There was an error while fetching a user: ", err);
     return res.status(500).send({
@@ -122,13 +120,11 @@ exports.getUserById = async (req, res) => {
     const fetchUser = await client.query(fetchQuery, [id]);
     console.log(fetchUser);
 
-    res
-      .status(200)
-      .send({
-        message: "Fetched user successfully!",
-        status: 200,
-        user: fetchUser.rows[0],
-      });
+    res.status(200).send({
+      message: "Fetched user successfully!",
+      status: 200,
+      user: fetchUser.rows[0],
+    });
   } catch (err) {
     console.log("There was an error while fetching a user: ", err);
     return res.status(500).send({
