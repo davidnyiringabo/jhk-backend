@@ -7,13 +7,16 @@ const {
   resetPassword,
 } = require("../controllers/auth.controllers");
 const authMiddleWare = require("../middlewares/auth");
-const { getAllAppointments,createAppointment,updateFeeStatus } = require("../controllers/appointments.controllers");
+const {
+  getAllAppointments,
+  createAppointment,
+  updateFeeStatus,
+} = require("../controllers/appointments.controllers");
 const router = express.Router();
 
 router.get("/getAll", getAllAppointments);
-router.post("/create", createAppointment);
-router.put("/updateStatus", updateFeeStatus);
-router.post("/requestFee", sendResetCode);
-router.delete("/delete", verifyCode);
+router.post("/create", [authMiddleWare], createAppointment);
+router.put("/updateStatus", [authMiddleWare], updateFeeStatus);
+router.post("/requestFee", [authMiddleWare], sendResetCode);
 
 module.exports = router;

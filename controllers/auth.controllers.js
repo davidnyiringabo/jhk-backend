@@ -39,9 +39,10 @@ exports.login = async (req, res) => {
 
     const token = generateToken(email, user.id);
     console.log(token);
-    res
-      .status(200)
-      .send({ message: "Successfully logged in", data: { token: token } });
+    res.status(200).send({
+      message: "Successfully logged in",
+      data: { token: token, user: user },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error" });
