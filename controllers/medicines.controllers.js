@@ -9,12 +9,10 @@ exports.getAllMedicines = async (req, res) => {
     return res.status(200).send({ data: medicines.rows, status: 200 });
   } catch (err) {
     console.log("Error occurred while getting medicines!", err);
-    return res
-      .status(500)
-      .send({
-        message: "Error occurred while getting medicines!",
-        status: 500,
-      });
+    return res.status(500).send({
+      message: "Error occurred while getting medicines!",
+      status: 500,
+    });
   }
 };
 
@@ -27,12 +25,10 @@ exports.getMedicineById = async (req, res) => {
     return res.status(200).send({ data: medicines.rows, status: 200 });
   } catch (err) {
     console.log("Error occurred while getting medicines!", err);
-    return res
-      .status(500)
-      .send({
-        message: "Error occurred while getting medicines!",
-        status: 500,
-      });
+    return res.status(500).send({
+      message: "Error occurred while getting medicines!",
+      status: 500,
+    });
   }
 };
 
