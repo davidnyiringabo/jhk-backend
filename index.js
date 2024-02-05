@@ -21,6 +21,7 @@ client
 
 app.use("/api/v1/auth", require("./routes/auth.routes"));
 app.use("/api/v1/user", require("./routes/user.routes"));
+app.use("/api/v1/appointments", require("./routes/appointments.routes.js"));
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
