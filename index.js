@@ -15,7 +15,6 @@ app.use(express.json());
 
 //connect postgres database
 
-
 // client
 //   .connect()
 //   .then(() => console.log("Connected to the database"))

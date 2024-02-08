@@ -52,11 +52,11 @@ exports.createMedicine = async (req, res) => {
       price,
       quantity,
       manufacturer,
-      expiryDate
+      expiryDate,
     ]);
-      return res
-        .status(200)
-        .send({ message: "Inserted medicine successfully!", status: 200 });
+    return res
+      .status(200)
+      .send({ message: "Inserted medicine successfully!", status: 200 });
   } catch (err) {
     console.log("Error occurred while inserting medicines!", err);
     if ((err.constraint = "medicines_email_key")) {
@@ -72,9 +72,18 @@ exports.createMedicine = async (req, res) => {
   }
 };
 
-exports.updateMedicine= async (req, res) => {
-  const { id,name, type, price, quantity, manufacturer, expiryDate } = req.body;
-  if (!id || !name || !type || !price || !quantity || !expiryDate || !manufacturer) {
+exports.updateMedicine = async (req, res) => {
+  const { id, name, type, price, quantity, manufacturer, expiryDate } =
+    req.body;
+  if (
+    !id ||
+    !name ||
+    !type ||
+    !price ||
+    !quantity ||
+    !expiryDate ||
+    !manufacturer
+  ) {
     return res
       .status(400)
       .send({ message: "Please provide full data!", status: 400 });
@@ -90,11 +99,11 @@ exports.updateMedicine= async (req, res) => {
       price,
       quantity,
       manufacturer,
-      expiryDate
+      expiryDate,
     ]);
-      return res
-        .status(200)
-        .send({ message: "Updated medicine successfully!", status: 200 });
+    return res
+      .status(200)
+      .send({ message: "Updated medicine successfully!", status: 200 });
   } catch (err) {
     console.log("Error occurred while updating medicines!", err);
     return res.status(500).send({

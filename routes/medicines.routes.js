@@ -6,7 +6,13 @@ const {
   updateDoctor,
   getDoctorById,
 } = require("../controllers/doctors.controllers");
-const { createMedicine, updateMedicine,getAllMedicines,getMedicineById,deleteMedicine } = require("../controllers/medicines.controllers");
+const {
+  createMedicine,
+  updateMedicine,
+  getAllMedicines,
+  getMedicineById,
+  deleteMedicine,
+} = require("../controllers/medicines.controllers");
 const router = express.Router();
 
 router.get("/getAll", getAllMedicines);
