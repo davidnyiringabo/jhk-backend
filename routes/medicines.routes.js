@@ -6,11 +6,13 @@ const {
   updateDoctor,
   getDoctorById,
 } = require("../controllers/doctors.controllers");
+const { createMedicine, updateMedicine,getAllMedicines,getMedicineById,deleteMedicine } = require("../controllers/medicines.controllers");
 const router = express.Router();
 
-router.get("/getAll", getAllDoctors);
-router.get("/getById", getDoctorById);
-router.post("/create", [authMiddleWare], createDoctor);
-router.put("/update", [authMiddleWare], updateDoctor);
+router.get("/getAll", getAllMedicines);
+router.get("/getById", getMedicineById);
+router.post("/create", [authMiddleWare], createMedicine);
+router.put("/update", [authMiddleWare], updateMedicine);
+router.delete("/delete", [authMiddleWare], deleteMedicine);
 
 module.exports = router;

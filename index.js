@@ -7,17 +7,20 @@ const multer = require("multer");
 const upload = multer();
 const { client } = require("./config/database/connect.js");
 const authMiddleWare = require("./middlewares/auth.js");
+const pg = require("pg");
 dotenv.config();
 const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //connect postgres database
-client
-  .connect()
-  .then(() => console.log("Connected to the database"))
-  .catch((err) => console.error("Error connecting to the database", err)),
-  app.use(cors());
+
+
+// client
+//   .connect()
+//   .then(() => console.log("Connected to the database"))
+//   .catch((err) => console.error("Error connecting to the database", err)),
+app.use(cors());
 
 app.use("/api/v1/auth", require("./routes/auth.routes"));
 app.use("/api/v1/user", require("./routes/user.routes"));
