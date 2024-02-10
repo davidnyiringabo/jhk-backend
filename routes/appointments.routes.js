@@ -11,11 +11,13 @@ const {
   getAllAppointments,
   createAppointment,
   updateFeeStatus,
+  deleteAppointmentById
 } = require("../controllers/appointments.controllers");
 const router = express.Router();
 
 router.get("/getAll", getAllAppointments);
 router.post("/create", [authMiddleWare], createAppointment);
+router.post("/delete", [authMiddleWare], deleteAppointmentById);
 router.put("/updateStatus", [authMiddleWare], updateFeeStatus);
 router.post("/requestFee", [authMiddleWare], sendResetCode);
 

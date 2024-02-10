@@ -31,8 +31,8 @@ exports.getDoctorById = async (req, res) => {
 };
 
 exports.createDoctor = async (req, res) => {
-  const { name, age, email, phone, gender, blood } = req.body;
-  if (!name || !age || !email || !phone || !gender || !blood) {
+  const { name, age, email, phone, gender, specialisation, image } = req.body;
+  if (!name || !age || !email || !phone || !gender || !specialisation) {
     return res
       .status(400)
       .send({ message: "Please provide all credentials!", status: 400 });
@@ -41,7 +41,7 @@ exports.createDoctor = async (req, res) => {
   const id = uuidv4();
   console.log(id);
   const query =
-    "INSERT INTO doctors (id,name, age, email, phone, gender) VALUES ($1,$2,$3,$4,$5,$6);";
+    "INSERT INTO doctors (id,name, age, email, phone, gender, specialisation, image) VALUES ($1,$2,$3,$4,$5,$6,$7, $8);";
   try {
     const appointments = await client.query(query, [
       id,
@@ -50,6 +50,8 @@ exports.createDoctor = async (req, res) => {
       email,
       phone,
       gender.toUpperCase(),
+      specialisation,
+      image
     ]);
     if (sendWelcomeEmail())
       return res
