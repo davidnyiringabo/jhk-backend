@@ -51,7 +51,7 @@ exports.createDoctor = async (req, res) => {
       phone,
       gender.toUpperCase(),
       specialisation,
-      image
+      image,
     ]);
     if (sendWelcomeEmail())
       return res

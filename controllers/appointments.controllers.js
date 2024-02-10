@@ -19,7 +19,14 @@ exports.createAppointment = async (req, res) => {
   if (!patient || !doctor || !date || !time || !feesPaid === undefined) {
     return res
       .status(400)
-      .send({ message: "Please provide all full credentials!" + " "+  patient, doctor, date, time, feesPaid, status: 400 });
+      .send({
+        message: "Please provide all full credentials!" + " " + patient,
+        doctor,
+        date,
+        time,
+        feesPaid,
+        status: 400,
+      });
   }
 
   console.log(req.body);
@@ -34,7 +41,7 @@ exports.createAppointment = async (req, res) => {
       JSON.parse(doctor),
       date,
       time,
-      feesPaid
+      feesPaid,
     ]);
     return res
       .status(200)
@@ -75,14 +82,18 @@ exports.deleteAppointmentById = async (req, res) => {
   if (!id) {
     return res
       .status(400)
-      .send({ message: "Please provide all full credentials!" + " "+  patient, doctor, date, time, feesPaid, status: 400 });
+      .send({
+        message: "Please provide all full credentials!" + " " + patient,
+        doctor,
+        date,
+        time,
+        feesPaid,
+        status: 400,
+      });
   }
-  const query =
-    "DELETE FROM appointments WHERE id = $1";
+  const query = "DELETE FROM appointments WHERE id = $1";
   try {
-    const appointments = await client.query(query, [
-      id,
-    ]);
+    const appointments = await client.query(query, [id]);
     return res
       .status(200)
       .send({ message: "Deleted appointment successfully!", status: 200 });

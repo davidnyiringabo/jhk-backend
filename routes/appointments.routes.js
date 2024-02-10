@@ -11,7 +11,7 @@ const {
   getAllAppointments,
   createAppointment,
   updateFeeStatus,
-  deleteAppointmentById
+  deleteAppointmentById,
 } = require("../controllers/appointments.controllers");
 const router = express.Router();
 
