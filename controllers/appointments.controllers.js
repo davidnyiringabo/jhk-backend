@@ -17,16 +17,14 @@ exports.getAllAppointments = async (req, res) => {
 exports.createAppointment = async (req, res) => {
   const { patient, doctor, date, time, feesPaid } = req.body;
   if (!patient || !doctor || !date || !time || !feesPaid === undefined) {
-    return res
-      .status(400)
-      .send({
-        message: "Please provide all full credentials!" + " " + patient,
-        doctor,
-        date,
-        time,
-        feesPaid,
-        status: 400,
-      });
+    return res.status(400).send({
+      message: "Please provide all full credentials!" + " " + patient,
+      doctor,
+      date,
+      time,
+      feesPaid,
+      status: 400,
+    });
   }
 
   console.log(req.body);
@@ -80,16 +78,14 @@ exports.updateFeeStatus = async (req, res) => {
 exports.deleteAppointmentById = async (req, res) => {
   const { id } = req.body;
   if (!id) {
-    return res
-      .status(400)
-      .send({
-        message: "Please provide all full credentials!" + " " + patient,
-        doctor,
-        date,
-        time,
-        feesPaid,
-        status: 400,
-      });
+    return res.status(400).send({
+      message: "Please provide all full credentials!" + " " + patient,
+      doctor,
+      date,
+      time,
+      feesPaid,
+      status: 400,
+    });
   }
   const query = "DELETE FROM appointments WHERE id = $1";
   try {
