@@ -140,7 +140,7 @@ exports.sendResetCode = async (req, res) => {
 };
 
 exports.verifyCode = async (req, res) => {
-  const { email, code } = req.body;
+  console.log(email, code)
   if (!email || !code) {
     res.status(400).send({
       message: "Please send all the required credentials!",
@@ -156,7 +156,7 @@ exports.verifyCode = async (req, res) => {
     const retrieveQuery = "SELECT * FROM otp WHERE email = $1";
     const retrievedCode = await client.query(retrieveQuery, [email]);
     if (retrievedCode.rows.length !== 0) {
-      if (retrievedCode.rows[0].otp === code) {
+      if (retrievedCode.rows[0].otp == code) {
         const verifiedUser = await client.query(
           "UPDATE users SET verified = true WHERE email = $1;",
           [email],
