@@ -91,7 +91,7 @@ exports.register = async (req, res) => {
       }
     } catch (err) {
       console.error(err.details);
-      res.status(400).send({ message: err.details ?? [0].message });
+      res.status(400).send({ message: err.details[0].message});
     }
   } catch (err) {
     console.error(err);
