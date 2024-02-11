@@ -140,7 +140,7 @@ exports.sendResetCode = async (req, res) => {
 };
 
 exports.verifyCode = async (req, res) => {
-  console.log(email, code)
+  console.log(email, code);
   if (!email || !code) {
     res.status(400).send({
       message: "Please send all the required credentials!",
