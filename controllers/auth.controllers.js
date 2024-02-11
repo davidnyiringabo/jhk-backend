@@ -106,8 +106,9 @@ exports.sendResetCode = async (req, res) => {
     return;
   }
 
-  if (!checkUserExistance(email)) {
-    res
+  console.log(await checkUserExistance(email))
+  if (!await checkUserExistance(email)) {
+    return res
       .status(400)
       .send({ message: "User With the same email doesn't exist!" });
   }
